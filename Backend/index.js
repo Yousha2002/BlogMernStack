@@ -31,10 +31,7 @@ app.use("/images", express.static(imagesDir));
 // Database connection (no deprecated options)
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(process.env.MONGO_URL);
     console.log("Database connected successfully");
   } catch (err) {
     console.error("Database connection error:", err);
@@ -47,13 +44,13 @@ app.use("/api/users", userRoute);
 app.use("/api/posts", postRoute);
 app.use("/api/comments", commentRoute);
 
-// // Deployment
-// app.use(express.static(path.join(__dirname, "../Frontend/BlogMernStack/dist")));
-// app.get("*", (req, res) => {
-//   res.sendFile(
-//     path.resolve(__dirname, "..Frontend/BlogMernStack/dist", "index.html")
-//   );
-// });
+// Deployment
+app.use(express.static(path.join(__dirname, "../Frontend/BlogMernStack/dist")));
+app.get("*", (req, res) => {
+  res.sendFile(
+    path.resolve(__dirname, "..Frontend/BlogMernStack/dist", "index.html")
+  );
+});
 
 // Multer storage setup for image upload
 const storage = multer.diskStorage({
